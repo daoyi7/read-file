@@ -1,13 +1,15 @@
 const path = require('path')
 const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
   entry: './src/entry/index.js',
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist'),
     publicPath: '/'
   },
+  devtool: 'inline-source-map',
   module: {
     rules: [
       {
@@ -31,18 +33,12 @@ module.exports = {
     }
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
-  ],
-  // devServer: {
-  //   host: '0.0.0.0',
-  //   port: '8888',
-  //   hot: true,
-  //   inline: true,
-  //   historyApiFallback: true,
-  //   proxy: {
-  //     "/api": {
-  //       target: "http://localhost:3000"
-  //     }
-  //   }
-  // }
+    new webpack.HotModuleReplacementPlugin(),
+    new CleanWebpackPlugin(['dist']),
+    new HtmlWebpackPlugin({
+      title: 'Output Management',
+      template: 'src/entry/index.ejs',
+      dll: 'bundle.js'
+    })
+  ]
 }
